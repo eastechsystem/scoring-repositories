@@ -21,8 +21,16 @@ The **scoring-repositories** project provides implementation for the following e
 | `GET`	 	  | **{Server_Address}/v1/repositories/score?{Query_Parameters}**	 |  	The endpoint is use to return the computed popularity score.|
 
 
+## Getting the Code
 
-## How to build and run this project:
+To get a local copy of the current code, clone it using git and run it as follows.
+```bash
+    $ git clone https://github.com/eastechsystem/scoring-repositories.git
+    $ cd scoring-repositories
+    $ mvn clean spring-boot:run
+```
+
+## Additional maven goals to build, test and run this project:
 ```bash
 // 1. To clean project, run below maven command.
 $ mvn clean 
@@ -54,7 +62,6 @@ The project documentation which described the system flow and architecture, is a
 ## Project test report:
 The project have implemented several unit and integration tests, is also available in this project.
 ![scoring-repositories Test Report](Test_Reports.pdf "scoring-repositories Test Report")
-
 
 ## Request and Response samples:
 
