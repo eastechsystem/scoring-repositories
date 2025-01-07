@@ -10,15 +10,17 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class WebClientConfig {
     private static final String AUTHORIZATION_TOKEN_BUILDER = "Bearer %s";
+    private final String githubApiRootUrl;
+    private final String githubApiToken;
+    private final String githubApiContentType;
 
-    @Value("${github.developer.api.url}")
-    private String githubApiRootUrl;
-
-    @Value("${github.developer.api.token}")
-    private String githubApiToken;
-
-    @Value("${github.developer.api.content-type}")
-    private String githubApiContentType;
+    public WebClientConfig(@Value("${github.developer.api.url}") final String githubApiRootUrl,
+                           @Value("${github.developer.api.token}") final String githubApiToken,
+                           @Value("${github.developer.api.content-type}") final String githubApiContentType) {
+        this.githubApiToken = githubApiToken;
+        this.githubApiRootUrl = githubApiRootUrl;
+        this.githubApiContentType = githubApiContentType;
+    }
 
     @Bean
     public RestTemplate githubWebServiceConfig(RestTemplateBuilder builder) {

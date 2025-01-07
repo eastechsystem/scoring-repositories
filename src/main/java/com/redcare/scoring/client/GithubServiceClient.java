@@ -5,6 +5,7 @@ import static org.springframework.http.HttpMethod.GET;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -31,18 +32,19 @@ public class GithubServiceClient {
                                                    final String language,
                                                    int itemsPerPage,
                                                    int page) {
-        final String operationPath = buildOperationPath(createdAfter, language, itemsPerPage, page);
-
-        ResponseEntity<GithubApiResponse> response = null;
         try {
-            response = githubService.exchange(
-                    operationPath,
+            ResponseEntity<GithubApiResponse> response = githubService.exchange(
+                    buildOperationPath(createdAfter, language, itemsPerPage, page),
                     GET,
                     null,
                     GithubApiResponse.class);
 
             return nonNull(response) && nonNull(response.getBody()) ? response.getBody() : new GithubApiResponse();
         } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+                LOGGER.error("HTTP UNAUTHORIZED Error occured while calling github service {}", e);
+                return new GetTransactionsResponse();
+            }
             LOGGER.error("HTTP client error occured while calling github service {}", e);
             throw new GithubServiceException("HTTP client error occurred while calling github service.");
         } catch (Exception e) {
@@ -55,11 +57,14 @@ public class GithubServiceClient {
                                       final String language,
                                       int itemsPerPage,
                                       int page) {
-        String query = String.format(QUERY_PARAMS
-                , createdAfter
-                , language != null && !language.isEmpty() ? language : DEAFUALT_LANGUAGE_PARAMS);
+        String query = String.format(QUERY_PARAMS,
+                createdAfter,
+                language != null && !language.isEmpty() ? language : DEAFUALT_LANGUAGE_PARAMS);
 
-        final String operationPath = String.format(SEARCH_REPOSITORIES_PATH, query, itemsPerPage, page);
+        final String operationPath = String.format(SEARCH_REPOSITORIES_PATH,
+                query,
+                itemsPerPage,
+                page);
 
         LOGGER.info("Search repositories operation path: {}", operationPath);
         return operationPath;
