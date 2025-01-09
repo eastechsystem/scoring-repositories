@@ -16,6 +16,7 @@ public class AbstractTest {
     protected static final String ERROR_MESSAGE_KEY = "error";
     protected static final String UNEXPECTED_ERROR_MESSAGE = "An unexpected error occurred.";
     protected static final String BAD_GATEWAY_ERROR_MESSAGE = "GitHub API error";
+    protected static final String UN_AUTHORIZED_REQUESTS_ERROR_MESSAGE = "un authorized the requested resource";
     protected static final String TOO_MANY_REQUESTS_ERROR_MESSAGE = "Rate limit exceeded";
     protected static final String HTTP_CLIENT_ERROR_MESSAGE = "HTTP client error occurred while calling github service.";
     protected static final String EXPECTED_URL = "/search/repositories?q=created:>2022-01-01 language:java&sort=stars&order=desc&per_page=10&page=1";

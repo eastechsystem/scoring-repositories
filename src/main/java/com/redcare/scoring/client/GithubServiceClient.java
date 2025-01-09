@@ -3,6 +3,7 @@ package com.redcare.scoring.client;
 import static java.util.Objects.nonNull;
 import static org.springframework.http.HttpMethod.GET;
 
+import com.redcare.scoring.exception.UnauthorizedGithubServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -42,13 +43,19 @@ public class GithubServiceClient {
             return nonNull(response) && nonNull(response.getBody()) ? response.getBody() : new GithubApiResponse();
         } catch (HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-                LOGGER.error("HTTP UNAUTHORIZED Error occured while calling github service {}", e);
-                return new GetTransactionsResponse();
+                final String msg = "HTTP UNAUTHORIZED Error occurred while calling github service";
+                LOGGER.error(msg, e);
+                throw new UnauthorizedGithubServiceException(msg);
+            } else if (e.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {
+                final String msg = "HTTP Too Many Requests Error occurred while calling github service";
+                LOGGER.error(msg, e);
+                throw new UnauthorizedGithubServiceException(msg);
             }
-            LOGGER.error("HTTP client error occured while calling github service {}", e);
-            throw new GithubServiceException("HTTP client error occurred while calling github service.");
+            final String msg = "HTTP client error occurred while calling github service.";
+            LOGGER.error("HTTP client error occurred while calling github service", e);
+            throw new GithubServiceException(msg);
         } catch (Exception e) {
-            LOGGER.error("Error occured while calling github service {}", e);
+            LOGGER.error("Error occurred while calling github service", e);
             throw e;
         }
     }

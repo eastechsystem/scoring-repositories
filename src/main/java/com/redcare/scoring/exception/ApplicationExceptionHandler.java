@@ -26,6 +26,13 @@ public class ApplicationExceptionHandler {
                 .body(Map.of(ERROR_MESSAGE_KEY, ex.getMessage()));
     }
 
+    @ExceptionHandler(UnauthorizedGithubServiceException.class)
+    public ResponseEntity<Map<String, String>> handleUnauthorizedGithubServiceException(UnauthorizedGithubServiceException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of(ERROR_MESSAGE_KEY, ex.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleDefaultException(Exception ex) {
         return ResponseEntity

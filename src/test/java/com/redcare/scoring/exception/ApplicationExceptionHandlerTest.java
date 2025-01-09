@@ -32,6 +32,15 @@ public class ApplicationExceptionHandlerTest extends AbstractTest {
     }
 
     @Test
+    void handleUnauthorizedGithubServiceException_ShouldReturnTooManyRequests() {
+        var exception = new UnauthorizedGithubServiceException(UN_AUTHORIZED_REQUESTS_ERROR_MESSAGE);
+        var response = globalExceptionHandler.handleUnauthorizedGithubServiceException(exception);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertEquals(UN_AUTHORIZED_REQUESTS_ERROR_MESSAGE, response.getBody().get(ERROR_MESSAGE_KEY));
+    }
+
+    @Test
     void handleGenericException_ShouldReturnInternalServerError1() {
         var errMessage = "Unexpected error";
         var exception = new Exception(errMessage);
