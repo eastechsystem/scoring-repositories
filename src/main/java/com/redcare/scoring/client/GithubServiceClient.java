@@ -3,6 +3,7 @@ package com.redcare.scoring.client;
 import static java.util.Objects.nonNull;
 import static org.springframework.http.HttpMethod.GET;
 
+import com.redcare.scoring.exception.LimitExceededGithubServiceException;
 import com.redcare.scoring.exception.UnauthorizedGithubServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +50,7 @@ public class GithubServiceClient {
             } else if (e.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {
                 final String msg = "HTTP Too Many Requests Error occurred while calling github service";
                 LOGGER.error(msg, e);
-                throw new UnauthorizedGithubServiceException(msg);
+                throw new LimitExceededGithubServiceException(msg);
             }
             final String msg = "HTTP client error occurred while calling github service.";
             LOGGER.error("HTTP client error occurred while calling github service", e);

@@ -19,8 +19,8 @@ public class ApplicationExceptionHandler {
                 .body(Map.of(ERROR_MESSAGE_KEY, ex.getMessage()));
     }
 
-    @ExceptionHandler(LimitExceededException.class)
-    public ResponseEntity<Map<String, String>> handleLimitExceededException(LimitExceededException ex) {
+    @ExceptionHandler(LimitExceededGithubServiceException.class)
+    public ResponseEntity<Map<String, String>> handleLimitExceededException(LimitExceededGithubServiceException ex) {
         return ResponseEntity
                 .status(HttpStatus.TOO_MANY_REQUESTS)
                 .body(Map.of(ERROR_MESSAGE_KEY, ex.getMessage()));

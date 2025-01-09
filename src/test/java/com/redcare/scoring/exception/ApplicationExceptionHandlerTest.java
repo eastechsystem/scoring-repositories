@@ -24,7 +24,7 @@ public class ApplicationExceptionHandlerTest extends AbstractTest {
 
     @Test
     void handleRateLimitException_ShouldReturnTooManyRequests() {
-        var exception = new LimitExceededException(TOO_MANY_REQUESTS_ERROR_MESSAGE);
+        var exception = new LimitExceededGithubServiceException(TOO_MANY_REQUESTS_ERROR_MESSAGE);
         var response = globalExceptionHandler.handleLimitExceededException(exception);
 
         assertEquals(HttpStatus.TOO_MANY_REQUESTS, response.getStatusCode());
